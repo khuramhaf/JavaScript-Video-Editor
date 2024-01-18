@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Video Player</title>
-  <script src="svg.js"></script>
   <style>
    
   </style>
@@ -32,7 +31,7 @@
 
  <p id = "time"></p>
 
-  <ul>
+  <ul id="list">
 
 
   </ul>
@@ -104,6 +103,29 @@ tempVideo.currentTime = time;
         });
 
         videos.push(tempVideo);
+
+        if(videos.length>0){
+             document.getElementById("list").innerHTML = " "
+            for(i=0;i<videos.length;i++){
+
+            var lielement = document.createElement("li")
+            lielement.id = videos[i].id
+            lielement.innerHTML = "id: "+videos[i].id + " | " + "Current Time: " + videos[i].currenttime + " | " + "Duration: " + videos[i].currentduration
+
+            lielement.addEventListener("dblclick", (event)=>{
+                for(i=0;i<videos.length;i++){
+
+                    if(videos[i].id ===event.target.id){
+
+                        videos.splice(i, 1)
+                    }
+                }
+event.target.remove();
+            })
+
+var list = document.getElementById("list")
+list.appendChild(lielement)
+        }}
       });
     }
 
