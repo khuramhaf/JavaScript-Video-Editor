@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Player</title>
+  <script src="svg.js"></script>
+  <style>
+   
+  </style>
+</head>
+<body>
+  <div>
+  <input type="file" accept="video/*" id="videoInput">
+</div>
+  <canvas width="400" height="400" id="canvas" style="border:2px solid black"></canvas>
+  <div>
+  <button onclick="play1()">Play</button>
+  <button onclick="pause()">Pause</button>
+  <label>Seek Time:</label><input id = "seektime" type="text">
+  <button onclick="seek()">Time Update</button>
+ 
+
+ 
+</div>
+<div style="margin-top: 10px;">
+ <label>Id:</label> <input id = "id1" type="text">
+ <label>Current Time:</label><input id = "currenttime" type="text">
+ <label>Duration:</label><input id = "duration" type="text">
+ <button onclick="editclip()">Submit</button>
+</div>
+
+ <p id = "time"></p>
+
+  <ul>
+
+
+  </ul>
+
+
+  <script>
+    var videos = [];
+    var time = 0;
+    var setinterval;
+    var totaltime = 0;
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var currenttime;
+    var checkplay2 = false;
+    var isPaused = true;
+
+    var videocurrenttime = 0;
+    var videoid = 0;
+    var videoelement;
+
+    document.addEventListener("DOMContentLoaded", function() {
+      var videoInput = document.getElementById("videoInput");
+
+      videoInput.addEventListener("change", function() {
+        var file = this.files[0];
+        if (file) {
+          pushFile(file);
+        }
+      });
+    });
+
+    function pushFile(file) {
+      var objectURL = URL.createObjectURL(file);
+
+      var tempVideo = document.createElement('video');
+      tempVideo.src = objectURL;
+      tempVideo.id = videoid;
+
+      videoid++;
+
+      tempVideo.addEventListener('loadedmetadata', function() {
+     
+        tempVideo.currenttime = 0;
+        tempVideo.maxduration = tempVideo.duration;
+        tempVideo.currentduration = tempVideo.duration
+
+
+        tempVideo.addEventListener("play", ()=>{
+tempVideo.currentTime = time;
+       })
+
+   
+       
+
+        tempVideo.addEventListener("timeupdate", timeupdate1);
+
+        tempVideo.addEventListener("pause", () => {
+          var array1 = [];
+
+          for (i = 0; i < videos.length; i++) {
+            array1.push(videos[i].currenttime + videos[i].currentduration);
+          }
+        
+          totaltime = Math.max.apply(null, array1);
+          if (parseInt(time) >= parseInt(totaltime)) {
+            clearInterval(setinterval);
+            time = 0;
+          }
+        });
+
+        videos.push(tempVideo);
+      });
+    }
+
+    function play1() {
+
+    if(videos.length>0){
+
+
+  for(i=0;i<videos.length;i++){
+
+    videos[i].addEventListener("timeupdate", timeupdate1)
+   
+  }
+}
+
+
+
+    
+
+      clearInterval(setinterval);
+
+      setinterval = setInterval(() => {
+        for (i = 0; i < videos.length; i++) {
+          if (time >= videos[i].currenttime && time <= videos[i].currenttime+videos[i].currentduration) {
+   
+   
+               if(videos[i].currentTime>0 && !videos[i].paused && !videos[i].ended ){
+
+               }
+
+             
+               else{
+                
+                videos[i].currentTime = videos[i].currenttime 
+              videos[i].play();  
+
+             
+               
+             
+              }
+
+            
+
+            if (checkplay2 === true) {
+              for(i=0;i<videos.length;i++){
+                videos[i].currentTime = time;
+              }
+              checkplay2 = false;
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(videos[i], 0, 0, canvas.width, canvas.height);
+          }
+
+      
+        }
+ document.getElementById("time").innerHTML = time.toFixed(1)
+        time = time + 0.1;
+      }, 1000 / 10);
+    }
+
+    function seek() {
+      checkplay2 = true;
+      var seektime = parseFloat(document.getElementById("seektime").value)
+      time = seektime
+    }
+
+    function pause() {
+      clearInterval(setinterval);
+
+      for(i=0;i<videos.length;i++){
+videos[i].removeEventListener("timeupdate", timeupdate1)
+videos[i].pause();
+
+      }
+     
+    }
+
+    function timeupdate1(event) {
+     
+if (event.target.currentTime >= event.target.currenttime + event.target.currentduration) {
+
+            event.target.pause();
+        event.target.remove();
+
+        
+       
+        
+      }
+    }
+
+function editclip(){
+
+  clearInterval(setinterval)
+
+  var id1 = parseInt(document.getElementById("id1").value)
+    var currenttime = parseFloat(document.getElementById("currenttime").value)
+    var duration = parseFloat(document.getElementById("duration").value)
+  for(i=0;i<videos.length; i++){
+videos[i].pause()
+
+   
+if(parseInt(videos[i].id) === id1){
+
+   videos[i].currenttime = currenttime
+  videos[i].currentduration = duration
+}
+  }
+}
+  </script>
+</body>
+</html>
