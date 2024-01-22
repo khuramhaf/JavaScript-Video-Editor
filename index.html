@@ -17,7 +17,7 @@
   <div>
   <input type="file" accept="video/audio" id="videoInput">
 </div>
-<div  id="container"></div>
+<canvas width="400" height="400" id="canvas" style="border:2px solid black"></canvas>
   <div>
   <button onclick="play1()">Play</button>
   <button onclick="pause()">Pause</button>
@@ -50,7 +50,7 @@
     var setinterval;
     var totaltime = 0;
     var currenttime;
-    var checkplay2 = false;
+    var seek2 = false;
     var isPaused = true;
 
     var videocurrenttime = 0;
@@ -62,14 +62,10 @@
 
     var playpromise;
 
-    var stage = new Konva.Stage({
-        container: 'container',
-        width: 300,
-    height: 300,
-             });
+    var canvas = document.getElementById("canvas")
+    ctx = canvas.getContext("2d")
 
-      var layer
-      var videoImage
+    
 
     document.addEventListener("DOMContentLoaded", function() {
       var videoInput = document.getElementById("videoInput");
@@ -101,26 +97,10 @@
         tempVideo.currenttime = 0;
         tempVideo.maxduration = tempVideo.duration;
         tempVideo.currentduration = tempVideo.duration
+    
+        
 
-
-
-        stage.width(tempVideo.videoWidth/5),
-    stage.height(tempVideo.videoHeight/5),
-            
- document.getElementById("container").style.width = tempVideo.videoWidth/5 + "px"
- document.getElementById("container").style.height = tempVideo.videoHeight/5 + "px"
-
-            
-        videoImage = new Konva.Image({
-    width: tempVideo.videoWidth/5,
-    height: tempVideo.videoHeight/5,
-    draggable: true,
-  });
-  layer = new Konva.Layer();    
- stage.add(layer)
-
-   
-       
+           
 
         tempVideo.addEventListener("timeupdate", timeupdate1);
 
@@ -190,11 +170,11 @@ list.appendChild(lielement)
 
 
     function seek() {
-      checkplay2 = true;
+     seek2 = true;
       var seektime = parseFloat(document.getElementById("seektime").value)
       time = seektime
       document.getElementById("time").innerHTML = time
-      
+
     }
 
     function pause() {
@@ -213,7 +193,6 @@ videos[i].pause();
 
     function timeupdate1(event) {
 
-        console.log(event.target.currentTime)
 
 videocurrenttime = event.target.currentTime;
      

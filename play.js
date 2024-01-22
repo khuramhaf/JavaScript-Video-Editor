@@ -42,7 +42,7 @@ setinterval = setInterval(function() {
               if (time>=videos[i].starttime && time <= videos[i].endtime) {
        
        
-     videos[i].play();  
+    
     
       if(ispaused===true){
 
@@ -50,48 +50,23 @@ setinterval = setInterval(function() {
         ispaused = false;
       }
 
-      if(checkplay2 === true){
+      if(seek2 === true){
 
         videos[i].currentTime = videos[i].currenttime
-        checkplay2=false;
+       
       }
     
-                
-    
-                if (checkplay2 === true) {
-                  for(i=0;i<videos.length;i++){
-                    videos[i].currentTime = time;
-                  }
-                  checkplay2 = false;
-                }
-    
-                  
-    layer.removeChildren()
-                layer.add(videoImage);
-    
-                var tr = new Konva.Transformer();
-                layer.add(tr);
-                tr.nodes([videoImage]);
-    
-                videoImage.image(videos[i]);
-        layer.draw();
-              }
+
+      videos[i].play();  
+  ctx.clearRect(0,0,400,400)
+  ctx.drawImage(videos[i], 0, 0, 400, 400)                
+  
+            }
     
           
             }
     
-            for(let i=0;i<shapes.length;i++){
-    
-                if(time>=shapes[i].currenttime && time<= shapes[i].currenttime + shapes[i].currentduration){
-                    layer.add(shapes[i]);
-                    var tr = new Konva.Transformer();
-      layer.add(tr);
-      tr.nodes([shapes[i]]);
-                    layer.draw()
-    
-    
-                }
-            }
+            seek2=false;
      
           
     
