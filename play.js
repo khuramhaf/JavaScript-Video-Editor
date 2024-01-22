@@ -3,7 +3,7 @@
 
         document.getElementById("time").innerHTML = time.toFixed(0)
 
-
+clearInterval(setinterval)
 
       var start = Date.now();
 setinterval = setInterval(function() {
@@ -39,28 +39,22 @@ setinterval = setInterval(function() {
     function animate() {
         
             for (i = 0; i < videos.length; i++) {
-              if (time>=videos[i].starttime && time <= videos[i].starttime+videos[i].currentduration) {
+              if (time>=videos[i].starttime && time <= videos[i].endtime) {
        
        
-                   if(videos[i].currentTime>0 && !videos[i].paused && !videos[i].ended ){
-                    
-                   }
+     videos[i].play();  
     
-                 
-                   else{
-    
-                  
-                 
-    
-                  
-                    
-                    videos[i].currentTime = videos[i].currenttime 
-                               playpromise=       videos[i].play();  
-    
-               
-                   
-                 
-                  }
+      if(ispaused===true){
+
+        videos[i].currentTime = videocurrenttime
+        ispaused = false;
+      }
+
+      if(checkplay2 === true){
+
+        videos[i].currentTime = videos[i].currenttime
+        checkplay2=false;
+      }
     
                 
     

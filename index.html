@@ -30,8 +30,8 @@
 <div style="margin-top: 10px;">
  <label>Id:</label> <input id = "id1" type="text">
  <label>Start Time:</label><input id = "starttime" type="text">
- <label>Current Time:</label><input id = "currenttime" type="text">
- <label>Duration:</label><input id = "duration" type="text">
+ <label>End Time:</label><input id = "endtime" type="text">
+<label>Current Time:</label><input id = "currenttime" type="text">
  <button onclick="editclip()">Submit</button>
 </div>
 
@@ -97,6 +97,7 @@
       tempVideo.addEventListener('loadedmetadata', function(event) {
        
      tempVideo.starttime = 0
+     tempVideo.endtime = tempVideo.duration
         tempVideo.currenttime = 0;
         tempVideo.maxduration = tempVideo.duration;
         tempVideo.currentduration = tempVideo.duration
@@ -118,24 +119,6 @@
   layer = new Konva.Layer();    
  stage.add(layer)
 
-
-
- 
-
-
-        tempVideo.addEventListener("play", (event)=>{
-
-            if(ispaused === true){
-for (i=0;i<videos.length;i++){
-
-    videos[i].currentTime = videos[i].currenttime+time;
-}
-
-ispaused= false
-
-}
-       })
-
    
        
 
@@ -143,18 +126,20 @@ ispaused= false
 
         tempVideo.addEventListener("pause", (event) => {
 
-            event.target.pause()
+     
+
+          
           var array1 = [];
 
           for (i = 0; i < videos.length; i++) {
-            array1.push(videos[i].starttime + videos[i].currentduration);
+            array1.push(videos[i].endtime);
           }
         
           totaltime = Math.max.apply(null, array1);
           if (time >= parseInt(totaltime)) {
             clearInterval(setinterval);
             cancelAnimationFrame(animationframe)
-            time = 1;
+            
           }
         });
 
@@ -164,14 +149,14 @@ ispaused= false
           var array1 = [];
 
           for (i = 0; i < videos.length; i++) {
-            array1.push(videos[i].starttime + videos[i].currentduration);
+            array1.push(videos[i].endtime);
           }
         
           totaltime = Math.max.apply(null, array1);
           if (time >= parseInt(totaltime)) {
             clearInterval(setinterval);
             cancelAnimationFrame(animationframe)
-            time = 1;
+          
           }
         });
 
@@ -208,10 +193,8 @@ list.appendChild(lielement)
       checkplay2 = true;
       var seektime = parseFloat(document.getElementById("seektime").value)
       time = seektime
-      for(i=0;i<videos.length;i++){
-
-        videos[i].currentTime = seektime+videos[i].currenttime
-      }
+      document.getElementById("time").innerHTML = time
+      
     }
 
     function pause() {
@@ -230,47 +213,43 @@ videos[i].pause();
 
     function timeupdate1(event) {
 
-        var x = 0
-     
-if (time >= event.target.starttime + event.target.currentduration) {
+        console.log(event.target.currentTime)
 
-
-    if (playpromise !== undefined) {
-playpromise.then(() => {
-    event.target.pause()
-         event.target.remove();
-    })
-    .catch(error => {
+videocurrenttime = event.target.currentTime;
      
-    });
+if (time >= event.target.endtime) {
+
+    
+   clearInterval(setinterval)
+
+   event.target.pause()
+      event.target.remove()
+}
   }
-
-
-   
-
-        
-       
-        
-      }
-    }
 
 function editclip(){
 
-  clearInterval(setinterval)
+
 
   var id1 = parseInt(document.getElementById("id1").value)
   var starttime= parseInt(document.getElementById("starttime").value)
     var currenttime = parseFloat(document.getElementById("currenttime").value)
-    var duration = parseFloat(document.getElementById("duration").value)
-  for(i=0;i<videos.length; i++){
-videos[i].pause()
+    var endtime = parseFloat(document.getElementById("endtime").value)
+    var x = 0;
+  for(let i=0;i<videos.length; i++){
+
+    
+
 
    
 if(parseInt(videos[i].id) === id1){
 
    videos[i].starttime = starttime
-    videos[i].currenttime = currenttime
-  videos[i].currentduration = duration
+    videos[i].currentTime = currenttime
+  videos[i].endtime = endtime
+  videos[i].pause();
+  videos[i].currenttime = currenttime
+
 }
   }
 
@@ -290,7 +269,7 @@ if(parseInt(videos[i].id) === id1){
                         videos.splice(i, 1)
                     }
                 }
-event.target.remove();
+
             })
 
 var list = document.getElementById("list")
