@@ -51,8 +51,11 @@ setinterval = setInterval(function() {
       }
 
       if(seek2 === true){
+        var seektime = parseFloat(document.getElementById("seektime").value)
 
-        videos[i].currentTime = videos[i].currenttime
+        videos[i].currentTime = videos[i].currenttime + seektime
+
+        console.log(videos[i].currenttime + seektime)
        
       }
     
