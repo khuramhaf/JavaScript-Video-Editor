@@ -55,7 +55,6 @@ setinterval = setInterval(function() {
 
         videos[i].currentTime = videos[i].currenttime + seektime
 
-        console.log(videos[i].currenttime + seektime)
        
       }
     

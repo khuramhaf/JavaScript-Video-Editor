@@ -148,7 +148,7 @@
 
             var lielement = document.createElement("li")
             lielement.id = videos[i].id
-            lielement.innerHTML = "id: "+videos[i].id + " | " + "Start Time: " + videos[i].starttime + " | " + "Current Time: " + videos[i].currenttime + " | " + "Duration: " + videos[i].currentduration
+            lielement.innerHTML = "id: "+videos[i].id + " | " + "Start Time: " + videos[i].starttime + " | " + "End Time: " + videos[i].endtime + " | " + "Current Time: " + videos[i].currenttime + " | " + "Duration: " + videos[i].currentduration
 
             lielement.addEventListener("dblclick", (event)=>{
                 for(i=0;i<videos.length;i++){
@@ -199,8 +199,9 @@ videocurrenttime = event.target.currentTime;
 if (time >= event.target.endtime) {
 
     
-   clearInterval(setinterval)
 
+    
+  
    event.target.pause()
       event.target.remove()
 }
@@ -238,7 +239,7 @@ if(parseInt(videos[i].id) === id1){
 
             var lielement = document.createElement("li")
             lielement.id = videos[i].id
-            lielement.innerHTML = "id: "+videos[i].id + " | " + "Start Time: " + videos[i].starttime + " | " + "Current Time: " + videos[i].currenttime + " | " + "Duration: " + videos[i].currentduration
+            lielement.innerHTML = "id: "+videos[i].id + " | " + "Start Time: " + videos[i].starttime + " | " + "End Time: " + videos[i].endtime + " | " + "Current Time: " + videos[i].currenttime + " | " + "Duration: " + videos[i].currentduration
 
             lielement.addEventListener("dblclick", (event)=>{
                 for(i=0;i<videos.length;i++){
