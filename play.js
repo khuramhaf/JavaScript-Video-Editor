@@ -1,8 +1,31 @@
     
- 
+ var seeked = false
     function play1() {
 
 clearInterval(setinterval)
+
+
+for(i=0;i<videos.length;i++){
+var  source1 = audiocontext.createBufferSource()
+ source1.buffer = videos[i].audio
+ source1.connect(audiocontext.destination)
+ if(paused){
+  source1.start(audiocontext.currentTime+videos[i].starttime-time1, videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
+ 
+ }
+
+ else if(seeked){
+  source1.start(audiocontext.currentTime+videos[i].starttime-time1, videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
+
+ }
+
+ else{
+ source1.start(audiocontext.currentTime+ videos[i].starttime, videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
+}
+source.push(source1)
+}
+paused = false;
+seeked=false
 setinterval = setInterval(function() {
    
     
@@ -15,11 +38,9 @@ time1 = time/20
    videos[i].currenttime = videos[i].currenttime+.05
    videos[i].currentTime = videos[i].currenttime
 
-  
-
     ctx.clearRect(0,0,400,400)
             ctx.drawImage(videos[i], 0, 0, 400, 400)   
-
+            
 
                
   
@@ -60,6 +81,8 @@ time1 = time/20
 
    
     function seek() {
+
+      seeked = true;
         clearInterval(setinterval)
          var seektime = parseFloat(document.getElementById("seektime").value)
       
@@ -68,7 +91,14 @@ time1 = time/20
          document.getElementById("time").innerHTML = time1
          time = seektime*20
       
-    
+         clearInterval(setinterval);
+   
+
+         for(i=0;i<source.length;i++){
+    source[i].stop()
+   }
+   
+   source= []
    
 
 for(i=0;i<videos.length;i++){
