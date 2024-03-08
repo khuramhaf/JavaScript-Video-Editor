@@ -1,29 +1,51 @@
+    
+ 
     function play1() {
 
-
-        document.getElementById("time").innerHTML = time.toFixed(0)
-
 clearInterval(setinterval)
-
-      var start = Date.now();
 setinterval = setInterval(function() {
-    time++;
-    document.getElementById("time").innerHTML = time.toFixed(0)
+   
+    
+time1 = time/20
+    document.getElementById("time").innerHTML = time1.toFixed(1)
+    for (i = 0; i < videos.length; i++) {
+    if (time1>=videos[i].starttime&&time1<=videos[i].endtime) {
+       
 
-    var delta = Date.now() - start; // milliseconds elapsed since start
+   videos[i].currenttime = videos[i].currenttime+.05
+   videos[i].currentTime = videos[i].currenttime
 
   
-}, 1000); // update about every second
-      
-    if(videos.length>0){
+
+    ctx.clearRect(0,0,400,400)
+            ctx.drawImage(videos[i], 0, 0, 400, 400)   
 
 
-  for(let i=0;i<videos.length;i++){
+               
+  
+            }}
 
-    videos[i].addEventListener("timeupdate", timeupdate1)
+            time++;
+
+            
+            var array1 = [];
+
+
+
+            for (i = 0; i < videos.length; i++) {
+              array1.push(videos[i].endtime);
+            }
+            
+          
+      totaltime = Math.max.apply(null, array1);
+
+            if (time1 >= parseFloat(totaltime)) {
+              clearInterval(setinterval);
+             
+            }
    
-  }
-}
+}, 50); // update about every second
+      
 
 
 
@@ -31,47 +53,32 @@ setinterval = setInterval(function() {
 
 
 
-     animate();
+    
     }
 
 
 
-    function animate() {
-        
-            for (i = 0; i < videos.length; i++) {
-              if (time>=videos[i].starttime && time <= videos[i].endtime) {
+   
+    function seek() {
+        clearInterval(setinterval)
+         var seektime = parseFloat(document.getElementById("seektime").value)
+      
        
-       
+         time1 = seektime
+         document.getElementById("time").innerHTML = time1
+         time = seektime*20
+      
     
-    
-      if(ispaused===true){
+   
 
-        videos[i].currentTime = videocurrenttime
-        ispaused = false;
-      }
+for(i=0;i<videos.length;i++){
 
-      if(seek2 === true){
-        var seektime = parseFloat(document.getElementById("seektime").value)
+       if(seektime<videos[i].starttime){
 
-        videos[i].currentTime = videos[i].currenttime + seektime
+       videos[i].currenttime = videos[i].lefttime
+    }
 
-       
-      }
-    
-
-      videos[i].play();  
-  ctx.clearRect(0,0,400,400)
-  ctx.drawImage(videos[i], 0, 0, 400, 400)                
-  
-            }
-    
-          
-            }
-    
-            seek2=false;
-     
-          
-    
-        // Call requestAnimationFrame to schedule the next frame
-     animationframe=   requestAnimationFrame(animate);
-      }
+    else{
+        videos[i].currenttime = videos[i].lefttime +seektime-videos[i].starttime 
+    }
+       }}

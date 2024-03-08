@@ -7,8 +7,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Video Player</title>
-  <script src="addrect.js"></script>
   <script src="play.js"></script>
+
+
+
   <style>
    
   </style>
@@ -23,7 +25,6 @@
   <button onclick="pause()">Pause</button>
   <label>Seek Time:</label><input id = "seektime" type="text">
   <button onclick="seek()">Time Update</button>
-  <button onclick="addrect()">addrect</button>
 
  
 </div>
@@ -31,7 +32,7 @@
  <label>Id:</label> <input id = "id1" type="text">
  <label>Start Time:</label><input id = "starttime" type="text">
  <label>End Time:</label><input id = "endtime" type="text">
-<label>Current Time:</label><input id = "currenttime" type="text">
+<label>Left Time:</label><input id = "currenttime" type="text">
  <button onclick="editclip()">Submit</button>
 </div>
 
@@ -45,25 +46,16 @@
 
   <script>
     var videos = [];
-    var shapes=[]
-    var time = 1;
+   
+    var time = 0;
     var setinterval;
-    var totaltime = 0;
-    var currenttime;
-    var seek2 = false;
-    var isPaused = true;
-
-    var videocurrenttime = 0;
     var videoid = 0;
-    var videoelement;
-    var animationframe;
-
-    var ispaused = false
-
-    var playpromise;
+    var totaltime = 0;
+    var time1 
+ 
 
     var canvas = document.getElementById("canvas")
-    ctx = canvas.getContext("2d")
+   var ctx = canvas.getContext("2d")
 
     
 
@@ -95,52 +87,10 @@
      tempVideo.starttime = 0
      tempVideo.endtime = tempVideo.duration
         tempVideo.currenttime = 0;
+        tempVideo.lefttime = 0
         tempVideo.maxduration = tempVideo.duration;
         tempVideo.currentduration = tempVideo.duration
-    
-        
-
-           
-
-        tempVideo.addEventListener("timeupdate", timeupdate1);
-
-        tempVideo.addEventListener("pause", (event) => {
-
-     
-
-          
-          var array1 = [];
-
-          for (i = 0; i < videos.length; i++) {
-            array1.push(videos[i].endtime);
-          }
-        
-          totaltime = Math.max.apply(null, array1);
-          if (time >= parseInt(totaltime)) {
-            clearInterval(setinterval);
-            cancelAnimationFrame(animationframe)
-            
-          }
-        });
-
-        tempVideo.addEventListener("ended", (event) => {
-
-           
-          var array1 = [];
-
-          for (i = 0; i < videos.length; i++) {
-            array1.push(videos[i].endtime);
-          }
-        
-          totaltime = Math.max.apply(null, array1);
-          if (time >= parseInt(totaltime)) {
-            clearInterval(setinterval);
-            cancelAnimationFrame(animationframe)
-          
-          }
-        });
-
-        videos.push(tempVideo);
+    videos.push(tempVideo);
 
         if(videos.length>0){
              document.getElementById("list").innerHTML = " "
@@ -148,7 +98,7 @@
 
             var lielement = document.createElement("li")
             lielement.id = videos[i].id
-            lielement.innerHTML = "id: "+videos[i].id + " | " + "Start Time: " + videos[i].starttime + " | " + "End Time: " + videos[i].endtime + " | " + "Current Time: " + videos[i].currenttime + " | " + "Duration: " + videos[i].currentduration
+            lielement.innerHTML = "id: "+videos[i].id + " | " + "Start Time: " + videos[i].starttime + " | " + "End Time: " + videos[i].endtime + " | " + "Left Time: " + videos[i].lefttime + " | " + "Duration: " + videos[i].currentduration
 
             lielement.addEventListener("dblclick", (event)=>{
                 for(i=0;i<videos.length;i++){
@@ -169,47 +119,22 @@ list.appendChild(lielement)
 
 
 
-    function seek() {
-     seek2 = true;
-      var seektime = parseFloat(document.getElementById("seektime").value)
-      time = seektime
-      document.getElementById("time").innerHTML = time
-
-    }
+ 
 
     function pause() {
 
-        ispaused = true;
+  
       clearInterval(setinterval);
-      cancelAnimationFrame(animationframe)
+   
 
-      for(i=0;i<videos.length;i++){
-videos[i].removeEventListener("timeupdate", timeupdate1)
-videos[i].pause();
 
-      }
      
     }
 
-    function timeupdate1(event) {
-
-
-videocurrenttime = event.target.currentTime;
-     
-if (time >= event.target.endtime) {
-
-    
-
-    
-  
-   event.target.pause()
-      event.target.remove()
-}
-  }
 
 function editclip(){
 
-
+clearInterval(setinterval)
 
   var id1 = parseInt(document.getElementById("id1").value)
   var starttime= parseInt(document.getElementById("starttime").value)
@@ -225,10 +150,9 @@ function editclip(){
 if(parseInt(videos[i].id) === id1){
 
    videos[i].starttime = starttime
-    videos[i].currentTime = currenttime
+    videos[i].lefttime = currenttime
+    videos[i].currenttime = currenttime
   videos[i].endtime = endtime
-  videos[i].pause();
-  videos[i].currenttime = currenttime
 
 }
   }
@@ -239,7 +163,7 @@ if(parseInt(videos[i].id) === id1){
 
             var lielement = document.createElement("li")
             lielement.id = videos[i].id
-            lielement.innerHTML = "id: "+videos[i].id + " | " + "Start Time: " + videos[i].starttime + " | " + "End Time: " + videos[i].endtime + " | " + "Current Time: " + videos[i].currenttime + " | " + "Duration: " + videos[i].currentduration
+            lielement.innerHTML = "id: "+videos[i].id + " | " + "Start Time: " + videos[i].starttime + " | " + "End Time: " + videos[i].endtime + " | " + "Left Time: " + videos[i].lefttime + " | " + "Duration: " + videos[i].currentduration
 
             lielement.addEventListener("dblclick", (event)=>{
                 for(i=0;i<videos.length;i++){
