@@ -2,6 +2,15 @@
  var seeked = false
     function play1() {
 
+
+      var array1 = [];
+
+
+
+      for (i = 0; i < videos.length; i++) {
+        array1.push(videos[i].endtime);
+      }
+
 clearInterval(setinterval)
 
 
@@ -10,17 +19,17 @@ var  source1 = audiocontext.createBufferSource()
  source1.buffer = videos[i].audio
  source1.connect(audiocontext.destination)
  if(paused){
-  source1.start(audiocontext.currentTime+videos[i].starttime-time1, videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
+  source1.start(Math.abs(audiocontext.currentTime+videos[i].starttime-time1), videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
  
  }
 
  else if(seeked){
-  source1.start(audiocontext.currentTime+videos[i].starttime-time1, videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
+  source1.start(Math.abs(audiocontext.currentTime+videos[i].starttime-time1), videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
 
  }
 
  else{
- source1.start(audiocontext.currentTime+ videos[i].starttime, videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
+ source1.start(Math.abs(audiocontext.currentTime+ videos[i].starttime, videos[i].currenttime), videos[i].endtime-videos[i].lefttime)
 }
 source.push(source1)
 }
@@ -28,7 +37,7 @@ paused = false;
 seeked=false
 setinterval = setInterval(function() {
    
-    
+    console.log("helloworld")
 time1 = time/20
     document.getElementById("time").innerHTML = time1.toFixed(1)
     for (i = 0; i < videos.length; i++) {
@@ -49,13 +58,7 @@ time1 = time/20
             time++;
 
             
-            var array1 = [];
-
-
-
-            for (i = 0; i < videos.length; i++) {
-              array1.push(videos[i].endtime);
-            }
+          
             
           
       totaltime = Math.max.apply(null, array1);
