@@ -24,20 +24,31 @@ var  source1 = audiocontext.createBufferSource()
  }
 
  else if(seeked){
+  if(time1<videos[i].starttime){
+
+
   source1.start(Math.abs(audiocontext.currentTime+videos[i].starttime-time1), videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
 
+
+}
+
+else{
+  source1.start(0, videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
+
+  
+
+}
  }
 
  else{
- source1.start(Math.abs(audiocontext.currentTime+ videos[i].starttime, videos[i].currenttime), videos[i].endtime-videos[i].lefttime)
+  console.log("is this working")
+ source1.start(Math.abs(audiocontext.currentTime+ videos[i].starttime), videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
 }
 source.push(source1)
 }
 paused = false;
 seeked=false
 setinterval = setInterval(function() {
-   
-    console.log("helloworld")
 time1 = time/20
     document.getElementById("time").innerHTML = time1.toFixed(1)
     for (i = 0; i < videos.length; i++) {
