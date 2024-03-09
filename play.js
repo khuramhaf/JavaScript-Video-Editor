@@ -1,8 +1,11 @@
     
  var seeked = false
     function play1() {
+    
+if(audiocontext===undefined){
 
-
+  audiocontext = new AudioContext();
+}
       var array1 = [];
 
 
@@ -18,22 +21,27 @@ for(i=0;i<videos.length;i++){
 var  source1 = audiocontext.createBufferSource()
  source1.buffer = videos[i].audio
  source1.connect(audiocontext.destination)
- if(paused){
-  source1.start(Math.abs(audiocontext.currentTime+videos[i].starttime-time1), videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
- 
- }
 
- else if(seeked){
+
+
+ if(audiocontext.state==="suspended"){
+  audiocontext.resume()
+
+}
+
+ else if(seeked===true){
   if(time1<videos[i].starttime){
 
 
-  source1.start(Math.abs(audiocontext.currentTime+videos[i].starttime-time1), videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
+  source1.start(Math.abs(audiocontext.currentTime+videos[i].starttime-time1), videos[i].currenttime, videos[i].endtime-videos[i].starttime)
 
 
 }
 
 else{
-  source1.start(0, videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
+
+
+  source1.start(0, videos[i].currenttime, videos[i].endtime-videos[i].starttime)
 
   
 
@@ -41,10 +49,9 @@ else{
  }
 
  else{
-  console.log("is this working")
- source1.start(Math.abs(audiocontext.currentTime+ videos[i].starttime), videos[i].currenttime, videos[i].endtime-videos[i].lefttime)
+
+ source1.start(Math.abs(audiocontext.currentTime+ videos[i].starttime), videos[i].currenttime, videos[i].endtime-videos[i].starttime)
 }
-source.push(source1)
 }
 paused = false;
 seeked=false
@@ -108,12 +115,10 @@ time1 = time/20
          clearInterval(setinterval);
    
 
-         for(i=0;i<source.length;i++){
-    source[i].stop()
-   }
-   
-   source= []
-   
+         if(audiocontext !== undefined){
+          audiocontext.close();
+          audiocontext = undefined
+          }
 
 for(i=0;i<videos.length;i++){
 

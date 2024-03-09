@@ -87,7 +87,7 @@
       audiocontext.decodeAudioData(fr.result, function(audiofile){
 
        tempVideo.audio=audiofile
-       console.log("video is decoded")
+     
       })}
 
       if (file){
@@ -144,16 +144,13 @@ list.appendChild(lielement)
  
 
     function pause() {
-paused = true;
 
-      clearInterval(setinterval);
+audiocontext.suspend()
+
+clearInterval(setinterval)
    
 
-      for(i=0;i<source.length;i++){
- source[i].stop()
-}
 
-source= []
 
      
     }
@@ -166,13 +163,10 @@ clearInterval(setinterval)
 time =0
 time1 = 0;
 
-
-for(i=0;i<source.length;i++){
-    source[i].stop()
-   }
-   
-   source= []
-
+if(audiocontext !== undefined){
+audiocontext.close();
+audiocontext = undefined
+}
   var id1 = parseInt(document.getElementById("id1").value)
   var starttime= parseInt(document.getElementById("starttime").value)
     var currenttime = parseFloat(document.getElementById("currenttime").value)
