@@ -38,13 +38,18 @@ var  source1 = audiocontext.createBufferSource()
 
 }
 
-else{
+else if(time1>=videos[i].starttime && time1<videos[i].endtime){
 
 
   source1.start(0, videos[i].currenttime, videos[i].endtime-videos[i].starttime)
 
   
 
+}
+
+else{
+
+  
 }
  }
 
@@ -53,7 +58,6 @@ else{
  source1.start(Math.abs(audiocontext.currentTime+ videos[i].starttime), videos[i].currenttime, videos[i].endtime-videos[i].starttime)
 }
 }
-paused = false;
 seeked=false
 setinterval = setInterval(function() {
 time1 = time/20
@@ -128,6 +132,7 @@ for(i=0;i<videos.length;i++){
     }
 
     else{
+      if(seektime>=videos[i].starttime && seektime<videos[i].endtime)
         videos[i].currenttime = videos[i].lefttime +seektime-videos[i].starttime 
     }
        }}
