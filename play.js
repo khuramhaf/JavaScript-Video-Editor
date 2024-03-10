@@ -287,7 +287,8 @@ play1()
 
 
 function createtimeline(){
-
+  time =0
+  time1 = 0;
 
   var canvas13 = document.getElementById("canvas13")
 
@@ -325,6 +326,8 @@ function createtimeline(){
         for(i=0;i<videos.length;i++){
           if(videos[i].id === entry.target.id){
             videos[i].endtime = ((parseInt(entry.target.style.width)/canvas13.width)*totaltime1)+videos[i].starttime
+
+            videos[i].currenttime = videos[i].lefttime
           }
         }
         // Trigger your resize handling logic here
@@ -344,7 +347,7 @@ function createtimeline(){
     });
     
     creatediv.addEventListener('dragend', (event) => {
-      event.target.style.marginLeft = event.target.getBoundingClientRect().left - event.clientX+"px"
+      event.target.style.marginLeft = event.clientX+"px"
 
     
 
@@ -355,9 +358,10 @@ function createtimeline(){
         if(videos[i].id === event.target.id){
 
           var currentstarttime =(event.clientX/canvas13.width)*totaltime1 -videos[i].starttime
-         console.log(event.clientX)
 videos[i].starttime =(event.clientX/canvas13.width)*totaltime1
 videos[i].endtime =videos[i].endtime +currentstarttime
+
+videos[i].currenttime = videos[i].lefttime
 
 
 
