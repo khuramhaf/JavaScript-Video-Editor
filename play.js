@@ -1,7 +1,7 @@
     
  var seeked = false
     function play1() {
-    
+      createtimeline()
 if(audiocontext===undefined){
 
   audiocontext = new AudioContext();
@@ -60,7 +60,7 @@ else{
 }
 seeked=false
 
-createtimeline()
+
 setinterval = setInterval(function() {
 time1 = time/20
 drawtime();
@@ -194,11 +194,8 @@ for(i=0;i<videos.length;i++){
 
         
 
-       
 
 
-
-var duration = totaltime1
             var canvas13 = document.getElementById("canvas13");
             var ctx1 = canvas13.getContext("2d");
 
@@ -287,8 +284,8 @@ play1()
 
 
 function createtimeline(){
-  time =0
-  time1 = 0;
+   clearInterval(setinterval)
+
 
   var canvas13 = document.getElementById("canvas13")
 
@@ -327,12 +324,14 @@ function createtimeline(){
           if(videos[i].id === entry.target.id){
             videos[i].endtime = ((parseInt(entry.target.style.width)/canvas13.width)*totaltime1)+videos[i].starttime
 
-            videos[i].currenttime = videos[i].lefttime
           }
         }
-        // Trigger your resize handling logic here
+     
        
       }
+
+      drawtime()
+    
     });
     
        resizeObserver.observe(creatediv);
