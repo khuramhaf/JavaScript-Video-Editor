@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Video Player</title>
   <script src="play.js"></script>
+  <script src="export.js"></script>
 
 
 
@@ -43,7 +44,7 @@
 
 
   </ul>
-
+<canvas onclick="clickseek(event)" width="1290" height="20" id="canvas13" style="background-color: gray;padding:3px"></canvas>
 
   <script>
     var videos = [];
@@ -78,6 +79,7 @@
 
     function pushFile(file) {
       var tempVideo = document.createElement('video');
+     
       if (audiocontext === undefined){
       audiocontext = new AudioContext();
       }
@@ -86,6 +88,7 @@
       fr.onload = function(){
       audiocontext.decodeAudioData(fr.result, function(audiofile){
 
+       
        tempVideo.audio=audiofile
      
       })}
@@ -114,6 +117,7 @@
         tempVideo.currentduration = tempVideo.duration
     videos.push(tempVideo);
 
+    drawtime()
         if(videos.length>0){
              document.getElementById("list").innerHTML = " "
             for(i=0;i<videos.length;i++){

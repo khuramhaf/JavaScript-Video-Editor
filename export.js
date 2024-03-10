@@ -1,45 +1,54 @@
-let muxer
-let videoEncoder 
-var canvas1
-var ctx1 
-var time1 =0
+var videochunk=[]
 
 function exportfun(){
 
-       canvas1 = document.getElementById("canvas");
-ctx1 = canvas1.getContext("2d")
+var source2=audiocontext.createBufferSource()
+source2.buffer=videos[0].audio
+source2.connect(audiocontext.destination);
+source2.start(0,0,10);
 
-setInterval(setinterval1, 33)
+
+var source3=audiocontext.createBufferSource()
+source3.buffer=videos[1].audio
+source3.connect(audiocontext.destination);
+source3.start(0,0,10);
+
+const dest = audiocontext.createMediaStreamDestination();
+source2.connect(dest);
+source3.connect(dest);
+
+
+var audiotracks = dest.stream.getAudioTracks();
+
+
+var outputstream = new MediaStream();
+
+var audiotracks = dest.stream.getAudioTracks()
+outputstream.addTrack(audiotracks[0])
+
+var mediarecorder = new MediaRecorder(outputstream, {mimeType:'video/webm; codecs="vp9, opus"'});
+mediarecorder.start();
+mediarecorder.ondataavailable=((e)=>{
+videochunk.push(e.data)
+}
+)
+
+source3.onended=function(){
+
+       mediarecorder.stop()
 }
 
-function setinterval1(){
-time1++
+mediarecorder.onstop=(()=>{
 
-console.log(time1)
+var blob = new Blob(videochunk, {type:'video/webm'})
 
-   
-    
-    
-    
+const url = URL.createObjectURL(blob);
 
-    
-    
- 
-  
-    
-    
-    videos[0].play();
-   
-    ctx1.clearRect(0,0,400,400)
-    ctx1.drawImage(videos[0], 0, 0, 400, 400)     
-    
-    
-    var imageData = canvas1.toDataURL('image/png');
+var anchor = document.createElement('a');
+anchor.href = url;
+anchor.download = "amooiz.webm"
 
-    console.log(imageData)
-    
-      }
-    
-    
-   
-    
+document.body.appendChild(anchor);
+anchor.click();
+})}
+
