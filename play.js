@@ -59,6 +59,8 @@ else{
 }
 }
 seeked=false
+
+createtimeline()
 setinterval = setInterval(function() {
 time1 = time/20
 drawtime();
@@ -154,6 +156,8 @@ for(i=0;i<videos.length;i++){
         }
         var totaltime1 = Math.max.apply(null, array1);
         var duration = totaltime1
+
+       
             var canvas13 = document.getElementById("canvas13");
             var ctx1 = canvas13.getContext("2d");
         var scale = duration/20
@@ -279,4 +283,92 @@ for(i=0;i<videos.length;i++){
   }
 play1()
 
+}
+
+
+function createtimeline(){
+
+
+  var canvas13 = document.getElementById("canvas13")
+
+  var ctx1 = canvas13.getContext("2d")
+
+  var array1=[]
+  for (i = 0; i < videos.length; i++) {
+    array1.push(videos[i].endtime);
+  }
+  var totaltime1 = Math.max.apply(null, array1);
+
+  var timecontainer = document.getElementById("timelinecontainer")
+  timecontainer.innerHTML = " "
+
+  for(i=0;i<videos.length;i++){
+
+    var creatediv=document.createElement("div")
+    creatediv.id = videos[i].id
+    creatediv.style.width=((videos[i].endtime-videos[i].starttime)/totaltime1)*canvas13.width + "px"
+    creatediv.style.height="40px"
+    creatediv.style.marginTop = "5px"
+    creatediv.style.marginLeft =  (videos[i].starttime/totaltime1)*canvas13.width + "px"
+    creatediv.style.backgroundColor="blue";
+    creatediv.style.resize = "horizontal"
+
+    creatediv.style.overflow = "auto"
+    creatediv.addEventListener("click", (e)=>{
+      
+    })
+
+    const resizeObserver = new ResizeObserver(entries => {
+      // Iterate over each entry
+      for (let entry of entries) {
+
+        for(i=0;i<videos.length;i++){
+          if(videos[i].id === entry.target.id){
+            videos[i].endtime = ((parseInt(entry.target.style.width)/canvas13.width)*totaltime1)+videos[i].starttime
+          }
+        }
+        // Trigger your resize handling logic here
+       
+      }
+    });
+    
+       resizeObserver.observe(creatediv);
+    creatediv.draggable = true;
+
+    creatediv.addEventListener('dragstart', (event) => {
+     console.log("drag start")
+    });
+    
+    creatediv.addEventListener('drag', (event) => {
+      
+    });
+    
+    creatediv.addEventListener('dragend', (event) => {
+      event.target.style.marginLeft = event.target.getBoundingClientRect().left - event.clientX+"px"
+
+    
+
+ 
+
+      for (i=0;i<videos.length;i++){
+
+        if(videos[i].id === event.target.id){
+
+          var currentstarttime =(event.clientX/canvas13.width)*totaltime1 -videos[i].starttime
+         console.log(event.clientX)
+videos[i].starttime =(event.clientX/canvas13.width)*totaltime1
+videos[i].endtime =videos[i].endtime +currentstarttime
+
+
+
+        }
+      }
+
+      drawtime()
+createtimeline()
+
+    });
+  
+   timecontainer.appendChild(creatediv)
+  }
 }

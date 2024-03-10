@@ -46,6 +46,8 @@
   </ul>
 <canvas onclick="clickseek(event)" width="1290" height="20" id="canvas13" style="background-color: gray;padding:3px"></canvas>
 
+<div id="timelinecontainer"></div>
+
   <script>
     var videos = [];
    
@@ -110,7 +112,7 @@
       tempVideo.addEventListener('loadedmetadata', function(event) {
        
      tempVideo.starttime = 10
-     tempVideo.endtime = tempVideo.duration
+     tempVideo.endtime = tempVideo.starttime+tempVideo.duration
         tempVideo.currenttime = 0;
         tempVideo.lefttime = 0
         tempVideo.maxduration = tempVideo.duration;
@@ -118,6 +120,7 @@
     videos.push(tempVideo);
 
     drawtime()
+    createtimeline()
         if(videos.length>0){
              document.getElementById("list").innerHTML = " "
             for(i=0;i<videos.length;i++){
