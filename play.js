@@ -359,7 +359,7 @@ resizeObserver.observe(creatediv);
     })
     
     creatediv.addEventListener('drag', (event) => {
-      
+     
     });
     
     creatediv.addEventListener('dragend', (event) => {
@@ -368,10 +368,10 @@ resizeObserver.observe(creatediv);
       if(audiocontext !== undefined){
         audiocontext.close();
         audiocontext = undefined
-       clearInterval(setinterval)
+      
         }
 
-      
+       clearInterval(setinterval)
 
  
 

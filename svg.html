@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable SVG Element</title>
+    <style>
+        /* Style the SVG element */
+        svg {
+            width: 200px;
+            height: 200px;
+            border: 1px solid black;
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+
+<svg id="draggable-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+    <circle cx="100" cy="100" r="50" fill="red" />
+</svg>
+
+<script>
+    // Get the SVG element
+    var svg = document.getElementById('draggable-svg');
+
+    // Variables to store initial position and mouse offset
+    var initialX, initialY, offsetX, offsetY;
+
+    // Function to handle mouse down event
+    function handleMouseDown(e) {
+        e.preventDefault();
+        initialX = e.clientX - offsetX;
+        initialY = e.clientY - offsetY;
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+    }
+
+    // Function to handle mouse move event
+    function handleMouseMove(e) {
+        e.preventDefault();
+        var newX = e.clientX - initialX;
+        var newY = e.clientY - initialY;
+        offsetX = e.clientX - newX;
+        offsetY = e.clientY - newY;
+        svg.style.transform = 'translate(' + newX + 'px, ' + newY + 'px)';
+    }
+
+    // Function to handle mouse up event
+    function handleMouseUp(e) {
+        e.preventDefault();
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseup', handleMouseUp);
+    }
+
+    // Add event listener to handle mouse down on SVG element
+    svg.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        offsetX = e.clientX - svg.getBoundingClientRect().left;
+        offsetY = e.clientY - svg.getBoundingClientRect().top;
+        handleMouseDown(e);
+    });
+</script>
+
+</body>
+</html>
