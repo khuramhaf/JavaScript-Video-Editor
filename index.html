@@ -52,7 +52,7 @@
     var videos = [];
    
     var time = 0;
-    var setinterval;
+    var setinterval=null;
     var videoid = 0;
     var totaltime = 0;
     var time1 
@@ -82,6 +82,10 @@
     function pushFile(file) {
       var tempVideo = document.createElement('video');
      
+      if(audiocontext !== undefined){
+          audiocontext.close();
+          audiocontext = undefined
+          }
       if (audiocontext === undefined){
       audiocontext = new AudioContext();
       }

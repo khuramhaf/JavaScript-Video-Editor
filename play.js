@@ -1,20 +1,22 @@
     
  var seeked = false
     function play1() {
-      createtimeline()
-if(audiocontext===undefined){
+
+      console.log("play is working")
+
+    if(videos.length>0){
+   
+     
+    }
+
+
+      if(audiocontext===undefined){
 
   audiocontext = new AudioContext();
 }
-      var array1 = [];
+    
 
 
-
-      for (i = 0; i < videos.length; i++) {
-        array1.push(videos[i].endtime);
-      }
-
-clearInterval(setinterval)
 
 
 for(i=0;i<videos.length;i++){
@@ -60,9 +62,9 @@ else{
 }
 seeked=false
 
-
 setinterval = setInterval(function() {
 time1 = time/20
+
 drawtime();
     document.getElementById("time").innerHTML = time1.toFixed(1)
     for (i = 0; i < videos.length; i++) {
@@ -83,14 +85,17 @@ drawtime();
             time++;
 
             
-          
+            var array1=[]
+            for (i = 0; i < videos.length; i++) {
+              array1.push(videos[i].endtime);
+            }
             
           
       totaltime = Math.max.apply(null, array1);
 
             if (time1 >= parseFloat(totaltime)) {
               clearInterval(setinterval);
-             
+             console.log("is clear interval")
             }
    
 }, 50); // update about every second
@@ -119,7 +124,7 @@ drawtime();
          document.getElementById("time").innerHTML = time1
          time = seektime*20
       
-         clearInterval(setinterval);
+       
    
 
          if(audiocontext !== undefined){
@@ -256,7 +261,7 @@ for(i=0;i<videos.length;i++){
 
 
             seeked = true;
-        clearInterval(setinterval)      
+        
        
        
          document.getElementById("time").innerHTML = time2
@@ -285,9 +290,10 @@ play1()
 
 function createtimeline(){
    clearInterval(setinterval)
-
-
-  var canvas13 = document.getElementById("canvas13")
+   time =0
+   time1 = 0;
+   
+   var canvas13 = document.getElementById("canvas13")
 
   var ctx1 = canvas13.getContext("2d")
 
@@ -310,36 +316,12 @@ function createtimeline(){
     creatediv.style.marginLeft =  (videos[i].starttime/totaltime1)*canvas13.width + "px"
     creatediv.style.backgroundColor="blue";
     creatediv.style.resize = "horizontal"
-
+    creatediv.oldwidth = ((videos[i].endtime-videos[i].starttime)/totaltime1)*canvas13.width
+creatediv.draggable =true
     creatediv.style.overflow = "auto"
     creatediv.addEventListener("click", (e)=>{
       
     })
-
-    const resizeObserver = new ResizeObserver(entries => {
-      // Iterate over each entry
-      for (let entry of entries) {
-
-        for(i=0;i<videos.length;i++){
-          if(videos[i].id === entry.target.id){
-            videos[i].endtime = ((parseInt(entry.target.style.width)/canvas13.width)*totaltime1)+videos[i].starttime
-
-          }
-        }
-     
-       
-      }
-
-      drawtime()
-    
-    });
-    
-       resizeObserver.observe(creatediv);
-    creatediv.draggable = true;
-
-    creatediv.addEventListener('dragstart', (event) => {
-     console.log("drag start")
-    });
     
     creatediv.addEventListener('drag', (event) => {
       
@@ -348,7 +330,13 @@ function createtimeline(){
     creatediv.addEventListener('dragend', (event) => {
       event.target.style.marginLeft = event.clientX+"px"
 
-    
+      if(audiocontext !== undefined){
+        audiocontext.close();
+        audiocontext = undefined
+       clearInterval(setinterval)
+        }
+
+      
 
  
 
@@ -367,8 +355,92 @@ videos[i].currenttime = videos[i].lefttime
         }
       }
 
+      time1 = 0
+      time = 0
       drawtime()
-createtimeline()
+     createtimeline()
+   
+
+
+    });
+  
+   timecontainer.appendChild(creatediv)
+  }
+}
+
+
+
+
+
+function drawtimeline(){
+
+
+  var array1=[]
+  for (i = 0; i < videos.length; i++) {
+    array1.push(videos[i].endtime);
+  }
+  var totaltime1 = Math.max.apply(null, array1);
+
+  var timecontainer = document.getElementById("timelinecontainer")
+  timecontainer.innerHTML = " "
+
+  for(i=0;i<videos.length;i++){
+
+    var creatediv=document.createElement("div")
+    creatediv.id = videos[i].id
+    creatediv.style.width=((videos[i].endtime-videos[i].starttime)/totaltime1)*canvas13.width + "px"
+    creatediv.style.height="40px"
+    creatediv.style.marginTop = "5px"
+    creatediv.style.marginLeft =  (videos[i].starttime/totaltime1)*canvas13.width + "px"
+    creatediv.style.backgroundColor="blue";
+    creatediv.style.resize = "horizontal"
+
+    creatediv.style.overflow = "auto"
+
+    
+    creatediv.draggable = true;
+
+    creatediv.addEventListener('dragstart', (event) => {
+     console.log("drag start")
+    });
+    
+    creatediv.addEventListener('drag', (event) => {
+      
+    });
+    
+    creatediv.addEventListener('dragend', (event) => {
+      event.target.style.marginLeft = event.clientX+"px"
+
+      if(audiocontext !== undefined){
+        audiocontext.close();
+        audiocontext = undefined
+       clearInterval(setinterval)
+        }
+
+      
+
+ 
+
+      for (i=0;i<videos.length;i++){
+
+        if(videos[i].id === event.target.id){
+
+          var currentstarttime =(event.clientX/canvas13.width)*totaltime1 -videos[i].starttime
+videos[i].starttime =(event.clientX/canvas13.width)*totaltime1
+videos[i].endtime =videos[i].endtime +currentstarttime
+
+videos[i].currenttime = videos[i].lefttime
+
+
+
+        }
+      }
+
+      time1 = 0
+      time = 0
+      drawtime()
+   
+
 
     });
   
