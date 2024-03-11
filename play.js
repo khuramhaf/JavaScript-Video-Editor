@@ -359,11 +359,13 @@ resizeObserver.observe(creatediv);
     })
     
     creatediv.addEventListener('drag', (event) => {
-      console.log(event.target.offsetLeft)
+  
     });
     
     creatediv.addEventListener('dragend', (event) => {
-      event.target.style.marginLeft = (event.clientX/1366)*1290+"px"
+
+      var offset =event.clientX- event.target.getBoundingClientRect().left
+      event.target.style.marginLeft = ((event.clientX/1366)*1290)-offset+"px"
 
       if(audiocontext !== undefined){
         audiocontext.close();
