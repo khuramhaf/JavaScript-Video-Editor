@@ -2,7 +2,7 @@
  var seeked = false
     function play1() {
 
-      console.log("play is working")
+     
 
     if(videos.length>0){
    
@@ -64,8 +64,7 @@ seeked=false
 
 setinterval = setInterval(function() {
 time1 = time/20
-
-drawtime();
+drawtime()
     document.getElementById("time").innerHTML = time1.toFixed(1)
     for (i = 0; i < videos.length; i++) {
     if (time1>=videos[i].starttime&&time1<=videos[i].endtime) {
@@ -95,7 +94,11 @@ drawtime();
 
             if (time1 >= parseFloat(totaltime)) {
               clearInterval(setinterval);
-             console.log("is clear interval")
+             time=0
+             time1=0
+             for(i=0;i<videos.length;i++){
+              videos[i].currenttime = videos[i].lefttime
+             }
             }
    
 }, 50); // update about every second
@@ -309,7 +312,7 @@ function createtimeline(){
   for(i=0;i<videos.length;i++){
 
     var creatediv=document.createElement("div")
-    creatediv.id = videos[i].id
+    creatediv.id =videos[i].id
     creatediv.style.width=((videos[i].endtime-videos[i].starttime)/totaltime1)*canvas13.width + "px"
     creatediv.style.height="40px"
     creatediv.style.marginTop = "5px"
@@ -319,6 +322,38 @@ function createtimeline(){
     creatediv.oldwidth = ((videos[i].endtime-videos[i].starttime)/totaltime1)*canvas13.width
 creatediv.draggable =true
     creatediv.style.overflow = "auto"
+
+const resizeObserver = new ResizeObserver((entries) => {
+  for (let entry of entries) {
+   if(parseInt(entry.target.oldwidth) !==parseInt(entry.target.style.width)){
+    for(i=0;i<videos.length;i++){
+      if(parseInt(videos[i].id)===parseInt(entry.target.id)){
+        videos[i].endtime = (parseInt(entry.target.style.width)/1290)*totaltime1
+videos[i].currenttime = videos[i].lefttime
+if(audiocontext !== undefined){
+  audiocontext.close();
+  audiocontext = undefined
+
+  }
+
+  clearInterval(setinterval)
+  if(audiocontext===undefined){
+
+    audiocontext = new AudioContext();
+  }
+      
+  time=0
+  time1=0
+  createtimeline()
+drawtime();
+      }
+    }
+    
+   }
+   entry.target.oldwidth =parseInt(entry.target.style.width)
+  }
+});
+resizeObserver.observe(creatediv);
     creatediv.addEventListener("click", (e)=>{
       
     })
@@ -372,78 +407,3 @@ videos[i].currenttime = videos[i].lefttime
 
 
 
-function drawtimeline(){
-
-
-  var array1=[]
-  for (i = 0; i < videos.length; i++) {
-    array1.push(videos[i].endtime);
-  }
-  var totaltime1 = Math.max.apply(null, array1);
-
-  var timecontainer = document.getElementById("timelinecontainer")
-  timecontainer.innerHTML = " "
-
-  for(i=0;i<videos.length;i++){
-
-    var creatediv=document.createElement("div")
-    creatediv.id = videos[i].id
-    creatediv.style.width=((videos[i].endtime-videos[i].starttime)/totaltime1)*canvas13.width + "px"
-    creatediv.style.height="40px"
-    creatediv.style.marginTop = "5px"
-    creatediv.style.marginLeft =  (videos[i].starttime/totaltime1)*canvas13.width + "px"
-    creatediv.style.backgroundColor="blue";
-    creatediv.style.resize = "horizontal"
-
-    creatediv.style.overflow = "auto"
-
-    
-    creatediv.draggable = true;
-
-    creatediv.addEventListener('dragstart', (event) => {
-     console.log("drag start")
-    });
-    
-    creatediv.addEventListener('drag', (event) => {
-      
-    });
-    
-    creatediv.addEventListener('dragend', (event) => {
-      event.target.style.marginLeft = event.clientX+"px"
-
-      if(audiocontext !== undefined){
-        audiocontext.close();
-        audiocontext = undefined
-       clearInterval(setinterval)
-        }
-
-      
-
- 
-
-      for (i=0;i<videos.length;i++){
-
-        if(videos[i].id === event.target.id){
-
-          var currentstarttime =(event.clientX/canvas13.width)*totaltime1 -videos[i].starttime
-videos[i].starttime =(event.clientX/canvas13.width)*totaltime1
-videos[i].endtime =videos[i].endtime +currentstarttime
-
-videos[i].currenttime = videos[i].lefttime
-
-
-
-        }
-      }
-
-      time1 = 0
-      time = 0
-      drawtime()
-   
-
-
-    });
-  
-   timecontainer.appendChild(creatediv)
-  }
-}
