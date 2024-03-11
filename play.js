@@ -232,7 +232,7 @@ for(i=0;i<videos.length;i++){
 
 
 
-    var time2 = (e.clientX/canvas13.width)*totaltime1
+    var time2 = (((e.clientX/1366)*1290)/canvas13.width)*totaltime1
     time1=time2
     time=time2*20
         var scale = duration/20
@@ -359,11 +359,11 @@ resizeObserver.observe(creatediv);
     })
     
     creatediv.addEventListener('drag', (event) => {
-     
+      console.log(event.target.offsetLeft)
     });
     
     creatediv.addEventListener('dragend', (event) => {
-      event.target.style.marginLeft = event.clientX+"px"
+      event.target.style.marginLeft = (event.clientX/1366)*1290+"px"
 
       if(audiocontext !== undefined){
         audiocontext.close();
@@ -379,8 +379,8 @@ resizeObserver.observe(creatediv);
 
         if(videos[i].id === event.target.id){
 
-          var currentstarttime =(event.clientX/canvas13.width)*totaltime1 -videos[i].starttime
-videos[i].starttime =(event.clientX/canvas13.width)*totaltime1
+          var currentstarttime =(((event.clientX/1366)*1290)/canvas13.width)*totaltime1 -videos[i].starttime
+videos[i].starttime =(((event.clientX/1366)*1290)/canvas13.width)*totaltime1
 videos[i].endtime =videos[i].endtime +currentstarttime
 
 videos[i].currenttime = videos[i].lefttime
