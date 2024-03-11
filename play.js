@@ -232,7 +232,7 @@ for(i=0;i<videos.length;i++){
 
 
 
-    var time2 = (((e.clientX/1366)*1290)/canvas13.width)*totaltime1
+    var time2 = (e.clientX/canvas13.width)*totaltime1
     time1=time2
     time=time2*20
         var scale = duration/20
