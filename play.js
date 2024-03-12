@@ -344,6 +344,8 @@ else{
     creatediv.style.marginTop = "5px"
     creatediv.style.marginLeft =  (videos[i].starttime/totaltime1)*canvas13.width + "px"
     creatediv.style.backgroundColor="blue";
+
+   
  creatediv.x =0
 
    
@@ -364,10 +366,11 @@ interact(creatediv).draggable({
      
     },
     move (event) {
+
+     
       event.target.x += event.dx
 
-      console.log(event.dx)
-      console.log(event.target.x)
+
     
 
       event.target.style.transform =
@@ -376,6 +379,11 @@ interact(creatediv).draggable({
 
   }
 }).on("dragend",(event)=>{
+
+  let { x, y } = event.target.dataset
+x=event.target.x
+
+
 
   var array1=[]
   for (i = 0; i < videos.length; i++) {
@@ -418,17 +426,42 @@ videos[i].currenttime = videos[i].lefttime
 
   time1 = 0
   time = 0
-  
+
+  Object.assign(event.target.dataset, { x, y })
+
 })
 
 interact(creatediv)
   .resizable({
+    
     edges: { left: true, right: true },
+    modifiers: [
+      interact.modifiers.restrictSize({
+        max: { width: (videos[i].maxduration/totaltime1)*canvas13.width, height: 500 }
+      })
+    ],
+    
     listeners: {
       move: function (event) {
         let { x, y } = event.target.dataset
 
+        
+
+        x = (parseFloat(x) || 0) + event.deltaRect.left
+      
+
+        Object.assign(event.target.style, {
+          width: `${event.rect.width}px`,
+         
+          transform: `translate(${x}px)`
+        })
+
+        Object.assign(event.target.dataset, { x, y })
+
+
+
     if(event.edges.right === true){
+
       var array1=[]
       for (i = 0; i < videos.length; i++) {
         if(videos[i].endtime>videos[i].maxduration){
@@ -447,6 +480,7 @@ interact(creatediv)
 
     else if(event.edges.left===true){
 
+
 resizeleft(event)
     }
 
@@ -454,15 +488,7 @@ resizeleft(event)
 
     }
 
-        x = (parseFloat(x) || 0) + event.deltaRect.left
       
-
-        Object.assign(event.target.style, {
-          width: `${event.rect.width}px`,
-          transform: `translate(${x}px)`
-        })
-
-        Object.assign(event.target.dataset, { x, y })
       }
     }
   })
@@ -474,6 +500,7 @@ resizeleft(event)
 
 
 function resizeright(event,totaltime1){
+
 
   var canvas13 = document.getElementById("canvas13")
 
@@ -527,9 +554,10 @@ function resizeright(event,totaltime1){
 
        for(i=0;i<videos.length;i++){
          if(parseInt(videos[i].id)===parseInt(event.target.id)){
-          videos[i].starttime = ((event.rect.left)/canvas13.width)*totaltime1
-   videos[i].currenttime = ((event.rect.left)/canvas13.width)*totaltime1
-   videos[i].lefttime = ((event.rect.left)/canvas13.width)*totaltime1
+          videos[i].starttime += ((event.deltaRect.left)/canvas13.width)*totaltime1
+   videos[i].currenttime += ((event.deltaRect.left)/canvas13.width)*totaltime1
+   videos[i].lefttime += ((event.deltaRect.left)/canvas13.width)*totaltime1
+event.target.x += event.dx
    if(audiocontext !== undefined){
      audiocontext.close();
      audiocontext = undefined
