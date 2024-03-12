@@ -2,7 +2,7 @@
  var seeked = false
     function play1() {
 
-     console.log(videos[0].starttime)
+   
 
     if(videos.length>0){
    
@@ -187,7 +187,7 @@ for(i=0;i<videos.length;i++){
             ctx1.fillStyle = "black"
             ctx1.globalAlpha = 1;
         var x = 0;
-            for (i = 1; i<parseInt(totaltime1)/scale; i++){
+            for (i = 1; i<parseFloat(totaltime1)/scale; i++){
         x = x+length
             ctx1.fillText(parseInt(i*scale), x, 12)
             ctx1.fillText("|", x+38, 12)
@@ -240,7 +240,7 @@ for(i=0;i<videos.length;i++){
             ctx1.fillStyle = "black"
             ctx1.globalAlpha = 1;
         var x = 0;
-            for (i = 1; i<parseInt(totaltime1)/scale; i++){
+            for (i = 1; i<parseFloat(totaltime1)/scale; i++){
         x = x+length
             ctx1.fillText(parseInt(i*scale), x, 12)
             ctx1.fillText("|", x+38, 12)
@@ -344,8 +344,7 @@ else{
     creatediv.style.marginTop = "5px"
     creatediv.style.marginLeft =  (videos[i].starttime/totaltime1)*canvas13.width + "px"
     creatediv.style.backgroundColor="blue";
- 
-    creatediv.oldwidth = ((videos[i].endtime-videos[i].starttime)/totaltime1)*canvas13.width
+ creatediv.x =0
 
    
 
@@ -357,7 +356,7 @@ else{
    timecontainer.appendChild(creatediv)
 
 
-   const position = { x: 0, y: 0 }
+  
 
 interact(creatediv).draggable({
   listeners: {
@@ -365,11 +364,14 @@ interact(creatediv).draggable({
      
     },
     move (event) {
-      position.x += event.dx
+      event.target.x += event.dx
+
+      console.log(event.dx)
+      console.log(event.target.x)
     
 
       event.target.style.transform =
-        `translate(${position.x}px)`
+        `translate(${event.target.x}px)`
     },
 
   }
@@ -401,8 +403,10 @@ else{
 
     if(videos[i].id === event.target.id){
 
-      var currentstarttime =((event.target.getBoundingClientRect().left)/canvas13.width)*totaltime1 -videos[i].starttime
-videos[i].starttime =((event.target.getBoundingClientRect().left)/canvas13.width)*totaltime1
+      var currentstarttime =((event.rect.left)/canvas13.width)*totaltime1 -videos[i].starttime
+videos[i].starttime =((event.rect.left)/canvas13.width)*totaltime1
+
+
 videos[i].endtime =videos[i].endtime +currentstarttime
 
 videos[i].currenttime = videos[i].lefttime
@@ -523,9 +527,9 @@ function resizeright(event,totaltime1){
 
        for(i=0;i<videos.length;i++){
          if(parseInt(videos[i].id)===parseInt(event.target.id)){
-          videos[i].starttime = ((event.target.getBoundingClientRect().left)/canvas13.width)*totaltime1
-   videos[i].currenttime = ((event.target.getBoundingClientRect().left)/canvas13.width)*totaltime1
-   videos[i].lefttime = ((event.target.getBoundingClientRect().left)/canvas13.width)*totaltime1
+          videos[i].starttime = ((event.rect.left)/canvas13.width)*totaltime1
+   videos[i].currenttime = ((event.rect.left)/canvas13.width)*totaltime1
+   videos[i].lefttime = ((event.rect.left)/canvas13.width)*totaltime1
    if(audiocontext !== undefined){
      audiocontext.close();
      audiocontext = undefined
