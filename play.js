@@ -2,7 +2,7 @@
  var seeked = false
     function play1() {
 
-     
+     console.log(videos[0].starttime)
 
     if(videos.length>0){
    
@@ -180,7 +180,7 @@ for(i=0;i<videos.length;i++){
             var canvas13 = document.getElementById("canvas13");
             var ctx1 = canvas13.getContext("2d");
         var scale = duration/20
-            var length = (1290/duration)*scale
+            var length = (canvas13.width/duration)*scale
         
             ctx1.clearRect(0,0, canvas13.width, canvas13.height)
         
@@ -233,7 +233,7 @@ for(i=0;i<videos.length;i++){
             var duration = totaltime1
 
             var scale = duration/20
-            var length = (1290/duration)*scale
+            var length = (canvas13.width/duration)*scale
         
             ctx1.clearRect(0,0, canvas13.width, canvas13.height)
         
@@ -255,7 +255,7 @@ for(i=0;i<videos.length;i++){
     time1=time2
     time=time2*20
         var scale = duration/20
-            var length = (1290/duration)*scale
+            var length = (canvas13.width/duration)*scale
         
             ctx1.clearRect(0,0, canvas13.width, canvas13.height)
         
@@ -471,11 +471,11 @@ resizeleft(event)
 
 function resizeright(event,totaltime1){
 
- 
+  var canvas13 = document.getElementById("canvas13")
 
       for(i=0;i<videos.length;i++){
         if(parseInt(videos[i].id)===parseInt(event.target.id)){
-          videos[i].endtime = (parseInt(event.target.style.width)/1290)*totaltime1 + videos[i].starttime
+          videos[i].endtime = (parseInt(event.target.style.width)/canvas13.width)*totaltime1 + videos[i].starttime
 
           
 
@@ -505,6 +505,7 @@ function resizeright(event,totaltime1){
 
 
     function resizeleft(event){
+      var canvas13 = document.getElementById("canvas13")
 
       var array1=[]
    
