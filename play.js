@@ -58,6 +58,7 @@ else{
  else{
 
  source1.start(Math.abs(audiocontext.currentTime+ videos[i].starttime), videos[i].currenttime, videos[i].endtime-videos[i].starttime)
+ createtimeline()
 }
 }
 seeked=false
@@ -86,8 +87,15 @@ drawtime()
             
             var array1=[]
             for (i = 0; i < videos.length; i++) {
+              if(videos[i].endtime>videos[i].maxduration){
               array1.push(videos[i].endtime);
             }
+          else{
+          
+            array1.push(videos[i].maxduration);
+          }
+          
+          }
             
           
       totaltime = Math.max.apply(null, array1);
@@ -154,14 +162,17 @@ for(i=0;i<videos.length;i++){
        function drawtime(){
 
        
-
-        var array1 = [];
-
-        
-
+        var array1=[]
         for (i = 0; i < videos.length; i++) {
+          if(videos[i].endtime>videos[i].maxduration){
           array1.push(videos[i].endtime);
         }
+      else{
+      
+        array1.push(videos[i].maxduration);
+      }
+      
+      }
         var totaltime1 = Math.max.apply(null, array1);
         var duration = totaltime1
 
@@ -208,8 +219,16 @@ for(i=0;i<videos.length;i++){
             var ctx1 = canvas13.getContext("2d");
 
             for (i = 0; i < videos.length; i++) {
+
+              if(videos[i].endtime>videos[i].maxduration){
               array1.push(videos[i].endtime);
             }
+
+            else{
+              array1.push(videos[i].maxduration)
+            }
+            }
+            
             var totaltime1 = Math.max.apply(null, array1);
             var duration = totaltime1
 
@@ -302,8 +321,15 @@ function createtimeline(){
 
   var array1=[]
   for (i = 0; i < videos.length; i++) {
+    if(videos[i].endtime>videos[i].maxduration){
     array1.push(videos[i].endtime);
   }
+else{
+
+  array1.push(videos[i].maxduration);
+}
+
+}
   var totaltime1 = Math.max.apply(null, array1);
 
   var timecontainer = document.getElementById("timelinecontainer")
@@ -318,90 +344,124 @@ function createtimeline(){
     creatediv.style.marginTop = "5px"
     creatediv.style.marginLeft =  (videos[i].starttime/totaltime1)*canvas13.width + "px"
     creatediv.style.backgroundColor="blue";
-    creatediv.style.resize = "horizontal"
-    creatediv.oldwidth = ((videos[i].endtime-videos[i].starttime)/totaltime1)*canvas13.width
-creatediv.draggable =true
-    creatediv.style.overflow = "auto"
-
-const resizeObserver = new ResizeObserver((entries) => {
-  for (let entry of entries) {
-   if(parseInt(entry.target.oldwidth) !==parseInt(entry.target.style.width)){
-    for(i=0;i<videos.length;i++){
-      if(parseInt(videos[i].id)===parseInt(entry.target.id)){
-        videos[i].endtime = (parseInt(entry.target.style.width)/1290)*totaltime1
-videos[i].currenttime = videos[i].lefttime
-if(audiocontext !== undefined){
-  audiocontext.close();
-  audiocontext = undefined
-
-  }
-
-  clearInterval(setinterval)
-  if(audiocontext===undefined){
-
-    audiocontext = new AudioContext();
-  }
-      
-  time=0
-  time1=0
-  createtimeline()
-drawtime();
-      }
-    }
-    
-   }
-   entry.target.oldwidth =parseInt(entry.target.style.width)
-  }
-});
-resizeObserver.observe(creatediv);
-    creatediv.addEventListener("click", (e)=>{
-      
-    })
-    
-    creatediv.addEventListener('drag', (event) => {
-  
-    });
-    
-    creatediv.addEventListener('dragend', (event) => {
-
-      var offset =event.clientX- event.target.getBoundingClientRect().left
-      event.target.style.marginLeft = ((event.clientX/1366)*1290)-offset+"px"
-
-      if(audiocontext !== undefined){
-        audiocontext.close();
-        audiocontext = undefined
-      
-        }
-
-       clearInterval(setinterval)
-
  
+    creatediv.oldwidth = ((videos[i].endtime-videos[i].starttime)/totaltime1)*canvas13.width
 
-      for (i=0;i<videos.length;i++){
+   
 
-        if(videos[i].id === event.target.id){
 
-          var currentstarttime =(((event.clientX/1366)*1290)/canvas13.width)*totaltime1 -videos[i].starttime
-videos[i].starttime =(((event.clientX/1366)*1290)/canvas13.width)*totaltime1
+   
+   
+    
+  
+   timecontainer.appendChild(creatediv)
+
+
+   const position = { x: 0, y: 0 }
+
+interact(creatediv).draggable({
+  listeners: {
+    start (event) {
+     
+    },
+    move (event) {
+      position.x += event.dx
+    
+
+      event.target.style.transform =
+        `translate(${position.x}px)`
+    },
+
+  }
+}).on("dragend",(event)=>{
+
+  var array1=[]
+  for (i = 0; i < videos.length; i++) {
+    if(videos[i].endtime>videos[i].maxduration){
+    array1.push(videos[i].endtime);
+  }
+else{
+
+  array1.push(videos[i].maxduration);
+}
+
+}
+  var totaltime1 = Math.max.apply(null, array1);
+  if(audiocontext !== undefined){
+    audiocontext.close();
+    audiocontext = undefined
+  
+    }
+
+   clearInterval(setinterval)
+
+
+
+  for (i=0;i<videos.length;i++){
+
+    if(videos[i].id === event.target.id){
+
+      var currentstarttime =((event.target.getBoundingClientRect().left)/canvas13.width)*totaltime1 -videos[i].starttime
+videos[i].starttime =((event.target.getBoundingClientRect().left)/canvas13.width)*totaltime1
 videos[i].endtime =videos[i].endtime +currentstarttime
 
 videos[i].currenttime = videos[i].lefttime
 
 
 
-        }
-      }
+    }
+  }
 
-      time1 = 0
-      time = 0
-      drawtime()
-     createtimeline()
-   
-
-
-    });
+  time1 = 0
+  time = 0
   
-   timecontainer.appendChild(creatediv)
+})
+
+interact(creatediv)
+  .resizable({
+    edges: { left: true, right: true },
+    listeners: {
+      move: function (event) {
+        let { x, y } = event.target.dataset
+
+    if(event.edges.right === true){
+      var array1=[]
+      for (i = 0; i < videos.length; i++) {
+        if(videos[i].endtime>videos[i].maxduration){
+        array1.push(videos[i].endtime);
+      }
+    else{
+    
+      array1.push(videos[i].maxduration);
+    }
+    
+    }
+      var totaltime1 = Math.max.apply(null, array1);
+
+      resizeright(event,totaltime1)
+    }
+
+    else if(event.edges.left===true){
+
+resizeleft(event)
+    }
+
+    else{
+
+    }
+
+        x = (parseFloat(x) || 0) + event.deltaRect.left
+      
+
+        Object.assign(event.target.style, {
+          width: `${event.rect.width}px`,
+          transform: `translate(${x}px)`
+        })
+
+        Object.assign(event.target.dataset, { x, y })
+      }
+    }
+  })
   }
 }
 
@@ -409,3 +469,78 @@ videos[i].currenttime = videos[i].lefttime
 
 
 
+function resizeright(event,totaltime1){
+
+ 
+
+      for(i=0;i<videos.length;i++){
+        if(parseInt(videos[i].id)===parseInt(event.target.id)){
+          videos[i].endtime = (parseInt(event.target.style.width)/1290)*totaltime1 + videos[i].starttime
+
+          
+
+  videos[i].currenttime = videos[i].lefttime
+  if(audiocontext !== undefined){
+    audiocontext.close();
+    audiocontext = undefined
+  
+    }
+  
+    clearInterval(setinterval)
+    if(audiocontext===undefined){
+  
+      audiocontext = new AudioContext();
+    }
+        
+    time=0
+    time1=0
+   
+   
+   
+        }
+      }
+      
+     }
+    
+
+
+    function resizeleft(event){
+
+      var array1=[]
+   
+      for (i = 0; i < videos.length; i++) {
+        if(videos[i].endtime>videos[i].maxduration){
+        array1.push(videos[i].endtime);
+      }
+    else{
+    
+      array1.push(videos[i].maxduration);
+    }
+    
+    }
+      var totaltime1 = Math.max.apply(null, array1);
+
+       for(i=0;i<videos.length;i++){
+         if(parseInt(videos[i].id)===parseInt(event.target.id)){
+          videos[i].starttime = ((event.target.getBoundingClientRect().left)/canvas13.width)*totaltime1
+   videos[i].currenttime = ((event.target.getBoundingClientRect().left)/canvas13.width)*totaltime1
+   videos[i].lefttime = ((event.target.getBoundingClientRect().left)/canvas13.width)*totaltime1
+   if(audiocontext !== undefined){
+     audiocontext.close();
+     audiocontext = undefined
+   
+     }
+   
+     clearInterval(setinterval)
+     if(audiocontext===undefined){
+   
+       audiocontext = new AudioContext();
+     }
+         
+     time=0
+     time1=0
+    
+         }
+       }
+       
+      }

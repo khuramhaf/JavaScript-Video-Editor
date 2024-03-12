@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+
+  
 
     <link rel="stylesheet" href="style.css">
   <meta charset="UTF-8">
@@ -9,7 +10,10 @@
   <title>Video Player</title>
   <script src="play.js"></script>
   <script src="export.js"></script>
-  <script src="plain-draggable.min.js"></script>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+  
 
 
 
@@ -122,7 +126,7 @@
      tempVideo.endtime = tempVideo.starttime+tempVideo.duration
         tempVideo.currenttime = 0;
         tempVideo.lefttime = 0
-        tempVideo.maxduration = tempVideo.duration;
+        tempVideo.maxduration = tempVideo.starttime+ tempVideo.duration;
         tempVideo.currentduration = tempVideo.duration
     videos.push(tempVideo);
 
