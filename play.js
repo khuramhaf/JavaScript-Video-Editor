@@ -58,7 +58,7 @@ else{
  else{
 
  source1.start(Math.abs(audiocontext.currentTime+ videos[i].starttime), videos[i].currenttime, videos[i].endtime-videos[i].starttime)
- createtimeline()
+ 
 }
 }
 seeked=false
@@ -342,7 +342,7 @@ else{
     creatediv.style.width=((videos[i].endtime-videos[i].starttime)/totaltime1)*canvas13.width + "px"
     creatediv.style.height="40px"
     creatediv.style.marginTop = "5px"
-    creatediv.style.marginLeft =  (videos[i].starttime/totaltime1)*canvas13.width + "px"
+    creatediv.style.marginLeft =  ((videos[i].starttime/totaltime1)*canvas13.width) + "px"
     creatediv.style.backgroundColor="blue";
 
    
@@ -408,11 +408,13 @@ else{
 
 
   for (i=0;i<videos.length;i++){
-
+    videos[i].currenttime = videos[i].lefttime
     if(videos[i].id === event.target.id){
 
       var currentstarttime =((event.rect.left)/canvas13.width)*totaltime1 -videos[i].starttime
-videos[i].starttime =((event.rect.left)/canvas13.width)*totaltime1
+videos[i].starttime =(event.rect.left/canvas13.width)*totaltime1-2
+
+
 
 
 videos[i].endtime =videos[i].endtime +currentstarttime
@@ -505,10 +507,14 @@ function resizeright(event,totaltime1){
 
       for(i=0;i<videos.length;i++){
         if(parseInt(videos[i].id)===parseInt(event.target.id)){
-          videos[i].endtime = (parseInt(event.target.style.width)/canvas13.width)*totaltime1 + videos[i].starttime
+          videos[i].endtime = ((event.rect.width/canvas13.width)*totaltime1) + videos[i].starttime
 
-          
+      videos[i].lefttime-=((event.deltaRect.width/canvas13.width)*totaltime1)
+if(videos[i].lefttime<0){
 
+  videos[i].lefttime=0
+}
+      console.log(videos[i].lefttime)
   videos[i].currenttime = videos[i].lefttime
   if(audiocontext !== undefined){
     audiocontext.close();
@@ -574,6 +580,7 @@ if(videos[i].currenttime<0){
 else{
 
 }
+
    if(audiocontext !== undefined){
      audiocontext.close();
      audiocontext = undefined
