@@ -461,7 +461,6 @@ interact(creatediv)
 
 
     if(event.edges.right === true){
-
       var array1=[]
       for (i = 0; i < videos.length; i++) {
         if(videos[i].endtime>videos[i].maxduration){
@@ -480,6 +479,7 @@ interact(creatediv)
 
     else if(event.edges.left===true){
 
+   
 
 resizeleft(event)
     }
@@ -500,7 +500,6 @@ resizeleft(event)
 
 
 function resizeright(event,totaltime1){
-
 
   var canvas13 = document.getElementById("canvas13")
 
@@ -536,6 +535,8 @@ function resizeright(event,totaltime1){
 
 
     function resizeleft(event){
+
+ 
       var canvas13 = document.getElementById("canvas13")
 
       var array1=[]
@@ -558,6 +559,21 @@ function resizeright(event,totaltime1){
    videos[i].currenttime += ((event.deltaRect.left)/canvas13.width)*totaltime1
    videos[i].lefttime += ((event.deltaRect.left)/canvas13.width)*totaltime1
 event.target.x += event.dx
+
+if(videos[i].lefttime<0){
+  videos[i].lefttime = 0;
+}
+
+else if(videos[i].starttime<0){
+  videos[i].starttime=0
+}
+if(videos[i].currenttime<0){
+  videos[i].currenttime = 0
+}
+
+else{
+
+}
    if(audiocontext !== undefined){
      audiocontext.close();
      audiocontext = undefined
